@@ -27,4 +27,12 @@ describe('Queue', function() {
         queue.push(1);
         queue.push(2);
     });
+    it('Pop Nothing', function(done) {
+        var queue = new Queue();
+        queue.pop().timeout(1000).then(function() {
+            should(true).eql(false);
+        }).catch(function(err) {
+            done();
+        }).done();
+    });
 });
