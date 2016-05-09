@@ -1,6 +1,6 @@
 var Promise = require("bluebird");
 
-module.exports = Queue;
+module.exports = Channel;
 
 function defer() {
     var ret = {};
@@ -12,37 +12,59 @@ function defer() {
     return ret;
 }
 
-function Queue() {
-    this.pushQueue = [];
-    this.popQueue = [];
+function Channel(limit) {
+    this.limit = limit || Number.MAX_VALUE;
+    this.queue = []; //store obj
+    this.pushQueue = []; //store promise
+    this.popQueue = []; //store promise
 }
 
-Queue.prototype.push = function(obj) {
+Channel.prototype.push = function(obj) {
     if (this.popQueue.length > 0) {
-        return this.popQueue.shift().resolve(obj);
+        this.popQueue.shift().resolve(obj);
+        return Promise.resolve();
+    } else if (this.queue.length < this.limit) {
+        this.queue.push(obj);
+        return Promise.resolve();
     } else {
-        return this.pushQueue.push(obj);
+        var q = defer();
+        this.pushQueue.push(q);
+        return q.promise.then(function() {
+            this.queue.push(obj);
+        });
     }
 }
 
-Queue.prototype.pop = function() {
-    if (this.pushQueue.length > 0) {
-        return Promise.resolve(this.pushQueue.shift());
+Channel.prototype.pop = function() {
+    if (this.queue.length > 0) {
+        var obj = this.queue.shift();
+        if (this.pushQueue.length) {
+            this.pushQueue.shift().resolve();
+        }
+        return Promise.resolve(obj);
     } else {
-        var item = defer();
-        this.popQueue.push(item);
-        return item.promise;
+        var q = defer();
+        this.popQueue.push(q);
+        return q.promise;
     }
 }
 
-Queue.prototype.resolve = function(res) {
+Channel.prototype.resolve = function(res) {
+    this.pushQueue.forEach(function(item) {
+        item.resolve(res);
+    });
+    this.pushQueue = [];
     this.popQueue.forEach(function(item) {
         item.resolve(res);
     });
     this.popQueue = [];
 }
 
-Queue.prototype.reject = function(err) {
+Channel.prototype.reject = function(err) {
+    this.pushQueue.forEach(function(item) {
+        item.reject(err);
+    })
+    this.pushQueue = [];
     this.popQueue.forEach(function(item) {
         item.reject(err);
     })
