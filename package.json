@@ -1,5 +1,5 @@
 {
-  "name": "yy-queue",
+  "name": "yy-channel",
   "version": "1.0.0",
   "description": "async queue use promise",
   "main": "index.js",
@@ -19,7 +19,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yuemenglong/yy-queue.git"
+    "url": "git+https://github.com/yuemenglong/yy-channel.git"
   },
   "keywords": [
     "async",
@@ -27,7 +27,7 @@
     "promise"
   ],
   "bugs": {
-    "url": "https://github.com/yuemenglong/yy-queue/issues"
+    "url": "https://github.com/yuemenglong/yy-channel/issues"
   },
-  "homepage": "https://github.com/yuemenglong/yy-queue#readme"
+  "homepage": "https://github.com/yuemenglong/yy-channel#readme"
 }
