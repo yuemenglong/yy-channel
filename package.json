@@ -9,7 +9,8 @@
   "author": "yuemenglong@126.com",
   "license": "ISC",
   "dependencies": {
-    "bluebird": "^3.3.5"
+    "bluebird": "^3.3.5",
+    "lodash": "^4.12.0"
   },
   "devDependencies": {
     "should": "^8.3.1"
