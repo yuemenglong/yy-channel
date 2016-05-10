@@ -1,6 +1,6 @@
 {
   "name": "yy-channel",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "async queue use promise",
   "main": "index.js",
   "scripts": {
@@ -25,7 +25,8 @@
   "keywords": [
     "async",
     "queue",
-    "promise"
+    "promise",
+    "mailbox"
   ],
   "bugs": {
     "url": "https://github.com/yuemenglong/yy-channel/issues"
